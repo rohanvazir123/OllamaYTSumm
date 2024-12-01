@@ -1,9 +1,10 @@
 import time
 from ollama import Client
 from youtube_transcript_api import YouTubeTranscriptApi
+import pprint
 
 # YOUR OLLAMA SERVER
-AI = Client(host='http://ollama-server:11434')
+AI = Client(host='http://127.0.0.1:11434/')
 
 def getVideoID(url) -> str:
     """
@@ -29,7 +30,7 @@ def getAvailableModels() -> dict:
     list = AI.list()
     return list
 
-def askOllama(transcript,usrModel) -> dict:
+def askOllama(transcript, usrModel) -> dict:
     """
     Sends the transcript to the ollama ai server and gets a JSON response. 
     """
@@ -51,32 +52,20 @@ def askOllama(transcript,usrModel) -> dict:
 def main():
     print("\nWelcome to the Youtube Summarizer. Powered by AI.")
     print("----------------------------------------------------------")
-    url = input("Insert the video URL here: ")
+    # url = input("Insert the video URL here: ")
+    url = "https://www.youtube.com/watch?v=5hLPYkJ5YOU"
     video_id = getVideoID(url)
     transcript = get_transcription(video_id)
     availableModels = getAvailableModels()
-    
-    print("\nAvailable models: ")
-    model_names = [each['name'] for each in availableModels['models']]
-    for i, name in enumerate(model_names, start=1):
-        print(f"{i}: {name}")
-    
-    print("\n")
-    selected_model_index = int(input("Choose the model you want to use: "))
-    print("\n--------------------------------------------------------")
-    
-    if 1 <= selected_model_index <= len(model_names):
-        usrModel = model_names[selected_model_index - 1]
-        print("You've selected the model: " + usrModel)
-        print("--------------------------------------------------------\n")
-        print("Summarizing...")
-        
-        summary = askOllama(transcript, usrModel)
-        time.sleep(1)
-        print("\nSummary:\n" + summary['message']['content'])
-    else:
-        print("Invalid model number selected.")
 
+    pprint.pprint(availableModels)
+    # exit (0)
     
+    usrModel = availableModels['models'][0]
+    pprint.pprint(usrModel)
+    summary = askOllama(transcript, usrModel['model'])
+    print("\nSummary:\n" + summary['message']['content'])
+    
+
 if __name__ == "__main__":
     main()
