@@ -53,7 +53,7 @@ def main():
     print("\nWelcome to the Youtube Summarizer. Powered by AI.")
     print("----------------------------------------------------------")
     # url = input("Insert the video URL here: ")
-    url = "https://www.youtube.com/watch?v=5hLPYkJ5YOU"
+    url = "https://www.youtube.com/watch?v=QsYGlZkevEg"
     video_id = getVideoID(url)
     transcript = get_transcription(video_id)
     availableModels = getAvailableModels()
